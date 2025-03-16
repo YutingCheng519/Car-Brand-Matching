@@ -48,25 +48,29 @@ autoswithout$split <- lapply(autoswithout$split, function(x) {
   x <- gsub("[^a-zA-Z0-9]", "", x)
   return(x)
 })
+```
 
-### Stage 2: Core Matching Logic
-Phase 1 - Direct Brand Matching
+### **Stage 2: Core Matching Logic**
+**Phase 1 - Direct Brand Matching**
+```r
 for (i in 1:nrow(autoswithout)) {
   if (any(model_and_brand$brand %in% autoswithout$split[[i]])) {
     autoswithout$brand[i] <- matched_brand
   }
 }
-Phase 2 - Model Inference
+```
+**Phase 2 - Model Inference**
+``` r
 for (i in 1:nrow(autoswithout)) {
   if (any(model_and_brand$model %in% autoswithout$split[[i]])) {
     autoswithout$model[i] <- matched_model
     autoswithout$brand[i] <- corresponding_brand
   }
 }
-
-### Stage 3: Brand-Specific Handlers
-BMW Series Detection
-
+```
+### **Stage 3: Brand-Specific Handlers**
+**BMW Series Detection**
+```r
 detect_series <- function(components) {
   series_patterns <- c("^1" = "1er", "^3" = "3er", "^x" = "x_series")
   for (patt in names(series_patterns)) {
@@ -76,8 +80,9 @@ detect_series <- function(components) {
   }
   return(NA)
 }
-
-Mercedes Class Detection
+```
+**Mercedes Class Detection**
+``` r
 detect_class <- function(components) {
   class_letters <- c("a", "c", "e", "s")
   for (cls in class_letters) {
@@ -87,16 +92,20 @@ detect_class <- function(components) {
   }
   return(NA)
 }
+```
 
-##🚀 Getting Started
+##🚀 **Getting Started**
  Prerequisites
+ ```r
 install.packages(c("dplyr", "stringr", "readr"))
+```
 
-📊 Performance Metrics
-Metric	Value	Description
-Total Processed	10,000	Number of records processed
-Direct Match Rate	82.3%	Brands found through exact matching
-Model Inference Rate	9.7%	Brands inferred from model info
-Ambiguous Cases	5.1%	Multiple possible matches
-Final Accuracy	92.0%	Validated against ground truth
-Remaining NAs	2.9%	Unresolvable cases
+## 📊 **Performance Metrics**
+| Metric | Value | Description |
+| ------ | ------ | ------ |
+| Total Processed | 10,000 | Number of records processed |
+| Direct Match Rate | 82.3% | Brands found through exact matching |
+| Model Inference Rate | 9.7% | Brands inferred from model info |
+| Ambiguous Cases | 5.1% | Multiple possible matches |
+| Final Accuracy | 92.0% | Validated against ground truth |
+| Remaining NAs | 2.9% | Unresolvable cases |
